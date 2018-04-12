@@ -1,13 +1,13 @@
-package br.usjt.deswebmob.servicedesk.model;
+package br.usjt.deswebmob.servicedeskcco.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by Guilherme Iago Varela - RA: 81613746 on 21/03/2018.
+ * Created by asbonato on 21/03/18.
  */
 
-public class Chamado implements Serializable {
+public class Chamado implements Serializable{
     private int numero;
     private Date dataAbertura, dataFechamento;
     private String status, descricao;
@@ -25,9 +25,7 @@ public class Chamado implements Serializable {
         this.fila = fila;
     }
 
-    public Chamado() {
-
-    }
+    public Chamado(){}
 
     public int getNumero() {
         return numero;
@@ -79,6 +77,6 @@ public class Chamado implements Serializable {
 
     @Override
     public String toString() {
-        return fila.getNome()+": " + descricao;
+        return fila.getNome()+": "+ descricao;
     }
 }

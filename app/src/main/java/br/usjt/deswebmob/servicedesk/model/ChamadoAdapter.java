@@ -1,8 +1,6 @@
-package br.usjt.deswebmob.servicedesk.model;
+package br.usjt.deswebmob.servicedeskcco.model;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +8,17 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
-import br.usjt.deswebmob.servicedesk.R;
+import br.usjt.deswebmob.servicedeskcco.R;
 
 /**
- * Created by Guil on 21/03/2018.
+ * Created by asbonato on 21/03/18.
  */
 
-public class ChamadoAdapter extends BaseAdapter{
+public class ChamadoAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Chamado> chamados;
 
@@ -33,31 +33,46 @@ public class ChamadoAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int i) {
-        return chamados.get(i);
+    public Object getItem(int position) {
+        return chamados.get(position);
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
-    public View getView(int i, View convextView, ViewGroup viewGroup) {
-        View view = null;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.linha_chamado, viewGroup, false);
-        ImageView imageView = (ImageView) view.findViewById(R.id.imagem_fila);
-        TextView numero = (TextView) view.findViewById(R.id.numero_status_chamado);
-        TextView datas = (TextView) view.findViewById(R.id.abertura_fechamento_chamado);
-        TextView descricao = (TextView) view.findViewById(R.id.descricao_chamado);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = convertView;
 
-        Chamado chamado = chamados.get(i);
+        if(view == null) {
+            LayoutInflater inflater = (LayoutInflater)
+                    context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.linha_chamado, parent, false);
 
-        numero.setText(String.format("numero: %d - status: %s", chamado.getNumero(), chamado.getStatus()));
-        datas.setText(String.format("abertura: %tD - fechamento: %tD", chamado.getDataAbertura(), chamado.getDataFechamento()));
-        descricao.setText(chamado.getDescricao());
+            ImageView imagem = (ImageView) view.findViewById(R.id.imagem_fila);
+            TextView numero = (TextView) view.findViewById(R.id.numero_status_chamado);
+            TextView datas = (TextView) view.findViewById(R.id.abertura_fechamento_chamado);
+            TextView descricao = (TextView) view.findViewById(R.id.descricao_chamado);
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.setNumero(numero);
+            viewHolder.setDatas(datas);
+            viewHolder.setDescricao(descricao);
+            viewHolder.setImagem(imagem);
+            view.setTag(viewHolder);
+        }
 
+        Chamado chamado = chamados.get(position);
+
+        ViewHolder viewHolder = (ViewHolder)view.getTag();
+
+        viewHolder.getImagem().setImageDrawable(Util.getDrawableDinamic(context, chamado.getFila().getFigura()));
+
+        viewHolder.getNumero().setText(String.format("numero: %d - status:%s", chamado.getNumero(), chamado.getStatus()));
+        viewHolder.getDatas().setText(String.format("aberture: %tD - fechamento: %tD",
+                chamado.getDataAbertura(), chamado.getDataFechamento()));
+        viewHolder.getDescricao().setText(chamado.getDescricao());
 
         return view;
     }
